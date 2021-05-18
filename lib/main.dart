@@ -46,14 +46,148 @@ class _MyHomePageState extends State<MyHomePage> {
   Color d = Colors.black;
   Color e = Colors.black;
   Color f = Colors.black;
-  double _val = 0.5;
+  double _val = 1;
   double _pitch = 1;
-  Future speak(String s, double pitch, double rate) async {
+
+  Future speak(String s) async {
     FlutterTts flutterTts = FlutterTts();
     await flutterTts.setLanguage("en-IN");
-    await flutterTts.setPitch(pitch);
-    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(_pitch);
+    await flutterTts.setSpeechRate(_val);
     await flutterTts.speak(s);
+  }
+
+  showOverlay(BuildContext context) async {
+    OverlayState? overlayState = Overlay.of(context);
+    OverlayEntry? overlayEntry;
+    overlayEntry = OverlayEntry(
+        builder: (context) => Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
+              child: Material(
+                type: MaterialType.transparency,
+                child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment(0.8,
+                              0.0), // 10% of the width, so there are ten blinds.
+                          colors: <Color>[Colors.blue, Colors.purple]),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "OnlySpeech",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'lobster',
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 45,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 50,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    overlayEntry?.remove();
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 45,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.play_arrow, color: Colors.white),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text("Watch a Tutorial",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.flag,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text("Report an Abuse",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.share,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text("Share this app",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.info,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text("About",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    )),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+              ),
+            ));
+
+    overlayState?.insert(overlayEntry);
   }
 
   String _sharedText = "";
@@ -74,7 +208,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _handleSharedData(String sharedData) {
     setState(() {
       _sharedText = sharedData;
+      speak(_sharedText);
       print(_sharedText);
+      _sharedText = "";
     });
   }
 
@@ -108,11 +244,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 45,
                 ),
               ),
-              Icon(
-                Icons.more_vert,
-                color: Colors.black,
-                size: 45,
-              )
+              GestureDetector(
+                  child: Icon(
+                    Icons.more_vert,
+                    color: Colors.black,
+                    size: 45,
+                  ),
+                  onTap: () {
+                    showOverlay(context);
+                  })
             ],
           ),
         ),
@@ -236,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Set speed',
             onChanged: (double newValue) {
               setState(() {
-                _val = newValue.round().toDouble();
+                _val = newValue;
               });
             },
             semanticFormatterCallback: (double newValue) {
@@ -265,7 +405,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Set pitch',
             onChanged: (double newValue) {
               setState(() {
-                _pitch = newValue.round().toDouble();
+                _pitch = newValue;
               });
             },
             semanticFormatterCallback: (double newValue) {
