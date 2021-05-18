@@ -67,8 +67,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
-=======
   flutter_tts:
     dependency: "direct main"
     description:
@@ -76,7 +74,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
->>>>>>> 5739b1ba2f59aadc2db834193ee747d0d704d071
   flutter_web_plugins:
     dependency: transitive
     description: flutter

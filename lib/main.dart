@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'shareservice.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -38,15 +39,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int selected_tone=0;
-  Color a=Colors.purple;
-  Color b=Colors.blue;
-  Color c=Colors.black;
-  Color d=Colors.black;Color e=Colors.black;
-  Color f=Colors.black;
-  double _val=0.5;
-  double _pitch=1;
-  Future speak(String s,double pitch,double rate) async {
+  int selected_tone = 0;
+  Color a = Colors.purple;
+  Color b = Colors.blue;
+  Color c = Colors.black;
+  Color d = Colors.black;
+  Color e = Colors.black;
+  Color f = Colors.black;
+  double _val = 0.5;
+  double _pitch = 1;
+  Future speak(String s, double pitch, double rate) async {
     FlutterTts flutterTts = FlutterTts();
     await flutterTts.setLanguage("en-IN");
     await flutterTts.setPitch(pitch);
@@ -54,14 +56,40 @@ class _MyHomePageState extends State<MyHomePage> {
     await flutterTts.speak(s);
   }
 
-  @override
-  void initState() {}
+  String _sharedText = "";
 
+  @override
+  void initState() {
+    super.initState();
+    ShareService()
+      // Register a callback so that we handle shared data if it arrives while the
+      // app is running
+      ..onDataReceived = _handleSharedData
+
+      // Check to see if there is any shared data already, meaning that the app
+      // was launched via sharing.
+      ..getSharedData().then(_handleSharedData);
+  }
+
+  void _handleSharedData(String sharedData) {
+    setState(() {
+      _sharedText = sharedData;
+      print(_sharedText);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
     return Scaffold(
         body: Center(
+      // Center is a layout widget. It takes a single child and positions it
+      // in the middle of the parent.
       child: Column(children: <Widget>[
         SizedBox(
           height: 40,
@@ -80,25 +108,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 45,
                 ),
               ),
-              PopupMenuButton<String>(
-                child: Icon(
-                  Icons.more_vert,
-                  size: 45,
-                ),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'Value1',
-                    child: Text('Choose value 1'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'Value2',
-                    child: Text('Choose value 2'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'Value3',
-                    child: Text('Choose value 3'),
-                  ),
-                ],
+              Icon(
+                Icons.more_vert,
+                color: Colors.black,
+                size: 45,
               )
             ],
           ),
@@ -209,69 +222,63 @@ class _MyHomePageState extends State<MyHomePage> {
                 "Speed",
                 style: TextStyle(fontSize: 35),
               ),
-            ),
-            Slider(
-                value: _val,
-                min: 0.0,
-                max: 1.0,
-                divisions: 10,
-                activeColor: Colors.black,
-                inactiveColor: Colors.black,
-                label: 'Set speed',
-                onChanged: (double newValue) {
-                  setState(() {
-                    _val = newValue.round().toDouble();
-                  });
-                },
-                semanticFormatterCallback: (double newValue) {
-                  return '${newValue.round()} dollars';
-                }
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Pitch",
-                    style: TextStyle(
-                        fontSize: 35
-
-                    ),),
-                  Icon(Icons.refresh)
-                ],
-
+              Icon(Icons.refresh)
+            ],
+          ),
+        ),
+        Slider(
+            value: _val,
+            min: 0.0,
+            max: 1.0,
+            divisions: 10,
+            activeColor: Colors.black,
+            inactiveColor: Colors.black,
+            label: 'Set speed',
+            onChanged: (double newValue) {
+              setState(() {
+                _val = newValue.round().toDouble();
+              });
+            },
+            semanticFormatterCallback: (double newValue) {
+              return '${newValue.round()} dollars';
+            }),
+        Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Pitch",
+                style: TextStyle(fontSize: 35),
               ),
-            ),
-            Slider(
-                value: _pitch.toDouble(),
-                min: 0.5,
-                max: 2.0,
-                divisions: 15,
-                activeColor: Colors.black,
-                inactiveColor: Colors.black,
-                label: 'Set pitch',
-                onChanged: (double newValue) {
-                  setState(() {
-                    _pitch = newValue.round().toDouble();
-                  });
-                },
-                semanticFormatterCallback: (double newValue) {
-                  return '${newValue.round()} dollars';
-                }
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(
-                    Icons.volume_up,
-                    size: 40,
-                  ),
-                  Text("Set",
-                  style: TextStyle(fontSize: 30),)
-                ],
+              Icon(Icons.refresh)
+            ],
+          ),
+        ),
+        Slider(
+            value: _pitch.toDouble(),
+            min: 0.5,
+            max: 2.0,
+            divisions: 15,
+            activeColor: Colors.black,
+            inactiveColor: Colors.black,
+            label: 'Set pitch',
+            onChanged: (double newValue) {
+              setState(() {
+                _pitch = newValue.round().toDouble();
+              });
+            },
+            semanticFormatterCallback: (double newValue) {
+              return '${newValue.round()} dollars';
+            }),
+        Padding(
+          padding: const EdgeInsets.all(30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                Icons.volume_up,
+                size: 40,
               ),
               Text(
                 "Set",
@@ -281,6 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         )
       ]),
+      // This trailing comma makes auto-formatting nicer for build methods.
     ));
   }
 }
