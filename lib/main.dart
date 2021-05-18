@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 void main() {
   runApp(MyApp());
@@ -52,14 +53,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Color c=Colors.black;
   Color d=Colors.black;Color e=Colors.black;
   Color f=Colors.black;
-  int _val=0;
-  int _pitch=0;
+  double _val=0.5;
+  double _pitch=1;
+  Future speak(String s,double pitch,double rate) async {
+    FlutterTts flutterTts = FlutterTts();
+    await flutterTts.setLanguage("en-IN");
+    await flutterTts.setPitch(pitch);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.speak(s);
+  }
 
   @override
   void initState() {
 
 
   }
+
 
 
 
@@ -227,16 +236,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Slider(
-                value: _val.toDouble(),
-                min: 0,
-                max: 20.0,
+                value: _val,
+                min: 0.0,
+                max: 1.0,
                 divisions: 10,
                 activeColor: Colors.black,
                 inactiveColor: Colors.black,
                 label: 'Set speed',
                 onChanged: (double newValue) {
                   setState(() {
-                    _val = newValue.round();
+                    _val = newValue.round().toDouble();
                   });
                 },
                 semanticFormatterCallback: (double newValue) {
@@ -261,15 +270,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Slider(
                 value: _pitch.toDouble(),
-                min: 0,
-                max: 20.0,
-                divisions: 10,
+                min: 0.5,
+                max: 2.0,
+                divisions: 15,
                 activeColor: Colors.black,
                 inactiveColor: Colors.black,
                 label: 'Set pitch',
                 onChanged: (double newValue) {
                   setState(() {
-                    _pitch = newValue.round();
+                    _pitch = newValue.round().toDouble();
                   });
                 },
                 semanticFormatterCallback: (double newValue) {
