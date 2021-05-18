@@ -47,14 +47,149 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int selected_tone=0;
+  int selectedTone=0;
   Color a=Colors.purple;
   Color b=Colors.blue;
-  Color c=Colors.black;
-  Color d=Colors.black;Color e=Colors.black;
+  Color c=Colors.purple;
+  Color d=Colors.blue;
+  Color e=Colors.black;
   Color f=Colors.black;
   double _val=0.5;
   double _pitch=1;
+  showOverlay(BuildContext context) async {
+    OverlayState overlayState = Overlay.of(context);
+    OverlayEntry overlayEntry = OverlayEntry(
+        builder: (context) => Positioned(
+          top: 0,
+          right:0,
+          left: 0,
+
+          child: menu,
+        ));
+
+
+    overlayState.insert(overlayEntry);
+
+    await Future.delayed(Duration(seconds: 2));
+
+    overlayEntry.remove();
+  }
+  Widget menu=Material(
+    type: MaterialType.transparency,
+    child: Container(
+        decoration: BoxDecoration(
+
+          gradient:LinearGradient(
+              begin: Alignment.topLeft,
+              end:
+              Alignment(0.8, 0.0), // 10% of the width, so there are ten blinds.
+              colors: <Color>[
+                Colors.blue, Colors.purple
+              ]),
+        ),
+
+
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    SizedBox(height: 20,),
+                    Text("OnlySpeech",
+
+
+                      style: TextStyle(
+
+                        color: Colors.white,
+                        fontFamily: 'lobster',
+                        fontStyle: FontStyle.italic,
+                        fontSize: 45,
+                      ),),
+                    SizedBox(width: 50,),
+                    GestureDetector(
+                      onTap: (){
+
+
+                      },
+
+                      child: Icon(Icons.close ,color: Colors.white,size: 45,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+
+                  children: [
+                    Icon(Icons.play_arrow,color: Colors.white),
+                    SizedBox(width: 20,),
+                    Text("Watch a Tutorial",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+
+                    )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+
+                  children: [
+                    Icon(Icons.flag,color: Colors.white,),
+                    SizedBox(width: 20,),
+                    Text("Report an Abuse",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+
+                    )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+
+                  children: [
+                    Icon(Icons.share,color: Colors.white,),
+                    SizedBox(width: 20,),
+                    Text("Share this app",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+
+                    )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+
+                  children: [
+                    Icon(Icons.info,color: Colors.white,),
+                    SizedBox(width: 20,),
+                    Text("About",style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+
+                    )),
+                  ],
+                ),
+              )
+
+
+
+            ],
+
+          ),
+        )
+    ),
+  );
   Future speak(String s,double pitch,double rate) async {
     FlutterTts flutterTts = FlutterTts();
     await flutterTts.setLanguage("en-IN");
@@ -62,15 +197,6 @@ class _MyHomePageState extends State<MyHomePage> {
     await flutterTts.setSpeechRate(rate);
     await flutterTts.speak(s);
   }
-
-  @override
-  void initState() {
-
-
-  }
-
-
-
 
 
 
@@ -107,7 +233,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 45,
                 ),),
                 SizedBox(width: 50,),
-                Icon(Icons.more_vert ,color: Colors.black,size: 45,
+                GestureDetector(
+                  onTap:() {
+                    showOverlay(context);
+                  },
+                  child: Icon(Icons.more_vert ,color: Colors.black,size: 45,
+                  ),
                 )
               ],
             ),
@@ -122,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     GestureDetector(
                       onTap: (){
                         setState(() {
-                          selected_tone=0;
+                          selectedTone=0;
                           c=a;
                           d=b;
                           e=Colors.black;
@@ -172,7 +303,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     GestureDetector(
                       onTap: (){
                         setState(() {
-                          selected_tone=1;
+                          selectedTone=1;
                           e=a;
                           f=b;
                           c=Colors.black;
@@ -245,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 label: 'Set speed',
                 onChanged: (double newValue) {
                   setState(() {
-                    _val = newValue.round().toDouble();
+                    _val = newValue;
                   });
                 },
                 semanticFormatterCallback: (double newValue) {
@@ -278,7 +409,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 label: 'Set pitch',
                 onChanged: (double newValue) {
                   setState(() {
-                    _pitch = newValue.round().toDouble();
+                    _pitch = newValue;
+                    print(_pitch);
                   });
                 },
                 semanticFormatterCallback: (double newValue) {
