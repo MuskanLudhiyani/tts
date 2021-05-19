@@ -3,7 +3,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'shareservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -63,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Color e = Colors.black;
   Color f = Colors.black;
   double _val = 1;
-  double currval=1;
-  double currval2=1;
+  double currval = 1;
+  double currval2 = 1;
   double _pitch = 1;
 
   Future speak(String s) async {
@@ -393,11 +392,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontFamily: "poppins",
                 ),
               ),
-              GestureDetector(child: Icon(Icons.refresh)
-              ,
-              onTap: (){
-                currval=1;
-              },)
+              GestureDetector(
+                child: Icon(Icons.refresh),
+                onTap: () {
+                  currval = 1;
+                },
+              )
             ],
           ),
         ),
@@ -412,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           child: Container(
             child: Slider(
-                value: _val,
+                value: currval.toDouble(),
                 min: 0.0,
                 max: 3.0,
                 divisions: 10,
@@ -439,10 +439,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontFamily: "poppins",
                 ),
               ),
-              GestureDetector(child: Icon(Icons.refresh),
-              onTap: (){
-                currval2=1;
-              },)
+              GestureDetector(
+                child: Icon(Icons.refresh),
+                onTap: () {
+                  currval2 = 1;
+                },
+              )
             ],
           ),
         ),
@@ -457,7 +459,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           child: Container(
             child: Slider(
-                value: _pitch.toDouble(),
+                value: currval2.toDouble(),
                 min: 0.5,
                 max: 2.0,
                 divisions: 15,
@@ -482,16 +484,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 size: 40,
               ),
               GestureDetector(
-                onTap: (){
-                  _val=currval;
-                  _pitch=currval2;
+                onTap: () {
+                  _val = currval;
+                  _pitch = currval2;
                   print(_pitch);
                   print(_val);
                 },
                 child: Text(
                   "Set",
-                  style: TextStyle(fontSize: 25,
-                    fontFamily: "racing",),
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontFamily: "racing",
+                  ),
                 ),
               )
             ],
