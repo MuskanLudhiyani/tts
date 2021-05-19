@@ -103,11 +103,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 type: MaterialType.transparency,
                 child: Container(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment(0.8,
-                              0.0), // 10% of the width, so there are ten blinds.
-                          colors: <Color>[Colors.blue, Colors.purple]),
+                      image: DecorationImage(
+                        image: AssetImage("assets/images/back.jpeg"),
+                          fit: BoxFit.cover)
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -309,6 +307,11 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               height: 80,
               decoration: BoxDecoration(
+
+              image: DecorationImage(
+              image: AssetImage("assets/images/back.jpeg"),
+                fit: BoxFit.cover),
+
                 border: Border.all(
                   color: Colors.black,
                   width: 2,
