@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'shareservice.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,15 +40,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  _launchEmail() async {
+    launch(
+        "mailto:rakhi@aeologic.com?subject=TestEmail&body=How are you%20plugin");
+  }
+
+  _launchURL() async {
+    const url = 'https://flutterdevs.com/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   int selected_tone = 0;
   Color a = Colors.purple;
   Color b = Colors.blue;
-  Color c = Colors.black;
-  Color d = Colors.black;
+  Color c = Colors.purple;
+  Color d = Colors.blue;
   Color e = Colors.black;
   Color f = Colors.black;
   double _val = 1;
   double _pitch = 1;
+
 
   Future speak(String s) async {
     FlutterTts flutterTts = FlutterTts();
@@ -56,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await flutterTts.setSpeechRate(_val);
     await flutterTts.speak(s);
   }
+
 
   showOverlay(BuildContext context) async {
     OverlayState? overlayState = Overlay.of(context);
@@ -80,21 +97,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(20.0),
+                            padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   "OnlySpeech",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'lobster',
+                                    fontFamily: 'racing',
                                     fontStyle: FontStyle.italic,
                                     fontSize: 45,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 50,
-                                ),
+
                                 GestureDetector(
                                   onTap: () {
                                     overlayEntry?.remove();
@@ -110,37 +126,47 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(20.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.play_arrow, color: Colors.white),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text("Watch a Tutorial",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    )),
-                              ],
+                            child: GestureDetector(
+                              onTap: (){
+                                _launchURL();
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.play_arrow, color: Colors.white),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text("Watch a Tutorial",
+                                      style: TextStyle(
+                                        fontFamily: "poppins",
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                      )),
+                                ],
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(20.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.flag,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text("Report an Abuse",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    )),
-                              ],
+                            child: GestureDetector(
+                              onTap: _launchEmail,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.flag,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text("Report an Abuse",
+                                      style: TextStyle(
+                                        fontFamily: "poppins",
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                      )),
+                                ],
+                              ),
                             ),
                           ),
                           Padding(
@@ -156,6 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 Text("Share this app",
                                     style: TextStyle(
+                                      fontFamily: "poppins",
                                       color: Colors.white,
                                       fontSize: 20,
                                     )),
@@ -163,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(20.0),
+                            padding: const EdgeInsets.fromLTRB(20,20,20,40),
                             child: Row(
                               children: [
                                 Icon(
@@ -175,9 +202,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 Text("About",
                                     style: TextStyle(
+                                      fontFamily: "poppins",
                                       color: Colors.white,
                                       fontSize: 20,
                                     )),
+
                               ],
                             ),
                           )
@@ -231,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
           height: 40,
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -239,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 "OnlySpeech",
                 style: TextStyle(
                   color: Colors.black,
-                  fontFamily: 'lobster',
+                  fontFamily: 'racing',
                   fontStyle: FontStyle.italic,
                   fontSize: 45,
                 ),
@@ -354,65 +383,91 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(20.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Speed",
-                style: TextStyle(fontSize: 35),
+                style: TextStyle(fontSize: 25,
+                  fontFamily: "poppins",),
               ),
               Icon(Icons.refresh)
             ],
           ),
         ),
-        Slider(
-            value: _val,
-            min: 0.0,
-            max: 1.0,
-            divisions: 10,
-            activeColor: Colors.black,
-            inactiveColor: Colors.black,
-            label: 'Set speed',
-            onChanged: (double newValue) {
-              setState(() {
-                _val = newValue;
-              });
-            },
-            semanticFormatterCallback: (double newValue) {
-              return '${newValue.round()} dollars';
-            }),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            activeTrackColor: Colors.black,
+            inactiveTrackColor: Colors.black,
+            trackShape: RectangularSliderTrackShape(),
+            trackHeight: 4.0,
+            thumbColor: Colors.white,
+            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+
+          ),
+
+          child: Container(
+            child: Slider(
+                value: _val,
+                min: 0.0,
+                max: 1.0,
+                divisions: 10,
+
+                label: 'Set speed',
+                onChanged: (double newValue) {
+                  setState(() {
+                    _val = newValue;
+                  });
+                },
+                semanticFormatterCallback: (double newValue) {
+                  return '${newValue.round()} dollars';
+                }),
+          ),
+        ),
         Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(20.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Pitch",
-                style: TextStyle(fontSize: 35),
+                style: TextStyle(fontSize: 25,fontFamily: "poppins",),
               ),
               Icon(Icons.refresh)
             ],
           ),
         ),
-        Slider(
-            value: _pitch.toDouble(),
-            min: 0.5,
-            max: 2.0,
-            divisions: 15,
-            activeColor: Colors.black,
-            inactiveColor: Colors.black,
-            label: 'Set pitch',
-            onChanged: (double newValue) {
-              setState(() {
-                _pitch = newValue;
-              });
-            },
-            semanticFormatterCallback: (double newValue) {
-              return '${newValue.round()} dollars';
-            }),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            activeTrackColor: Colors.black,
+            inactiveTrackColor: Colors.black,
+            trackShape: RectangularSliderTrackShape(),
+            trackHeight: 4.0,
+            thumbColor: Colors.white,
+            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+
+          ),
+          child: Container(
+            child: Slider(
+                value: _pitch.toDouble(),
+                min: 0.5,
+                max: 2.0,
+                divisions: 15,
+
+                label: 'Set pitch',
+                onChanged: (double newValue) {
+                  setState(() {
+                    _pitch = newValue;
+                  });
+                },
+                semanticFormatterCallback: (double newValue) {
+                  return '${newValue.round()} dollars';
+                }),
+          ),
+        ),
         Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.fromLTRB(60, 30, 60, 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -422,7 +477,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Text(
                 "Set",
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 25,
+                  fontFamily: "racing",),
               )
             ],
           ),

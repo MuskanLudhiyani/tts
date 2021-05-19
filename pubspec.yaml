@@ -64,11 +64,15 @@ flutter:
   # example:
   fonts:
 
-     - family: lobster
+     - family: poppins
        fonts:
-         - asset: assets/Lobster-Regular.ttf
+         - asset: assets/Poppins-Bold.ttf
 
-           weight: 700
+     - family: racing
+       fonts:
+          - asset: assets/RacingSansOne-Regular.ttf
+
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
