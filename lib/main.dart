@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'shareservice.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -65,6 +66,22 @@ class _MyHomePageState extends State<MyHomePage> {
   double currval = 1;
   double currval2 = 1;
   double _pitch = 1;
+
+  Future getval() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _val = prefs.getDouble('_val') ?? 1;
+      _pitch = prefs.getDouble('_pitch') ?? 1;
+    });
+  }
+
+  Future saveval() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setDouble('_val', _val);
+      prefs.setDouble('_pitch', _pitch);
+    });
+  }
 
   Future speak(String s) async {
     FlutterTts flutterTts = FlutterTts();
@@ -222,6 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    getval();
     ShareService()
       // Register a callback so that we handle shared data if it arrives while the
       // app is running
@@ -236,7 +254,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _sharedText = sharedData;
       speak(_sharedText);
-      print(_sharedText);
       _sharedText = "";
     });
   }
@@ -251,258 +268,306 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
         body: Center(
-      // Center is a layout widget. It takes a single child and positions it
-      // in the middle of the parent.
-      child: Column(children: <Widget>[
-        SizedBox(
-          height: 40,
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+          Column(
             children: [
-              Text(
-                "OnlySpeech",
-                style: TextStyle(
+              SizedBox(
+                height: 40,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "OnlySpeech",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'racing',
+                        fontStyle: FontStyle.italic,
+                        fontSize: 45,
+                      ),
+                    ),
+                    GestureDetector(
+                        child: Icon(
+                          Icons.more_vert,
+                          color: Colors.black,
+                          size: 45,
+                        ),
+                        onTap: () {
+                          showOverlay(context);
+                        })
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Container(
+              height: 80,
+              decoration: BoxDecoration(
+                border: Border.all(
                   color: Colors.black,
-                  fontFamily: 'racing',
-                  fontStyle: FontStyle.italic,
-                  fontSize: 45,
+                  width: 2,
                 ),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
-              GestureDetector(
-                  child: Icon(
-                    Icons.more_vert,
-                    color: Colors.black,
-                    size: 45,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    'Watch a Tutorial',
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontFamily: "poppins",
+                        fontWeight: FontWeight.bold),
                   ),
-                  onTap: () {
-                    showOverlay(context);
-                  })
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Icon(
-              Icons.arrow_forward_outlined,
-              color: Colors.black,
-            ),
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selected_tone = 0;
-                      c = a;
-                      d = b;
-                      e = Colors.black;
-                      f = Colors.black;
-                    });
-                  },
-                  child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "A",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                        height: 90,
-                        width: 90,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.white),
-                      ),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment(0.8,
-                                0.0), // 10% of the width, so there are ten blinds.
-                            colors: <Color>[c, d]),
-                      )),
-                ),
-                Text("Male", style: TextStyle(fontSize: 20))
-              ],
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selected_tone = 1;
-                      e = a;
-                      f = b;
-                      c = Colors.black;
-                      d = Colors.black;
-                    });
-                  },
-                  child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "B",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                        height: 90,
-                        width: 90,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.white),
-                      ),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment(0.8,
-                                0.0), // 10% of the width, so there are ten blinds.
-                            colors: <Color>[e, f]),
-                      )),
-                ),
-                Text(
-                  "Female",
-                  style: TextStyle(fontSize: 20),
-                )
-              ],
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Speed",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: "poppins",
-                ),
-              ),
-              GestureDetector(
-                child: Icon(Icons.refresh),
-                onTap: () {
-                  currval = 1;
-                },
-              )
-            ],
-          ),
-        ),
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            activeTrackColor: Colors.black,
-            inactiveTrackColor: Colors.black,
-            trackShape: RectangularSliderTrackShape(),
-            trackHeight: 4.0,
-            thumbColor: Colors.white,
-            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-          ),
-          child: Container(
-            child: Slider(
-                value: currval.toDouble(),
-                min: 0.0,
-                max: 3.0,
-                divisions: 10,
-                label: 'Set speed',
-                onChanged: (double newValue) {
-                  setState(() {
-                    currval = newValue;
-                  });
-                },
-                semanticFormatterCallback: (double newValue) {
-                  return '${newValue.round()} dollars';
-                }),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Pitch",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: "poppins",
-                ),
-              ),
-              GestureDetector(
-                child: Icon(Icons.refresh),
-                onTap: () {
-                  currval2 = 1;
-                },
-              )
-            ],
-          ),
-        ),
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            activeTrackColor: Colors.black,
-            inactiveTrackColor: Colors.black,
-            trackShape: RectangularSliderTrackShape(),
-            trackHeight: 4.0,
-            thumbColor: Colors.white,
-            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-          ),
-          child: Container(
-            child: Slider(
-                value: currval2.toDouble(),
-                min: 0.5,
-                max: 2.0,
-                divisions: 15,
-                label: 'Set pitch',
-                onChanged: (double newValue) {
-                  setState(() {
-                    currval2 = newValue;
-                  });
-                },
-                semanticFormatterCallback: (double newValue) {
-                  return '${newValue.round()} dollars';
-                }),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(60, 30, 60, 30),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                Icons.volume_up,
-                size: 40,
-              ),
-              GestureDetector(
-                onTap: () {
-                  _val = currval;
-                  _pitch = currval2;
-                  print(_pitch);
-                  print(_val);
-                },
-                child: Text(
-                  "Set",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontFamily: "racing",
+                  Icon(
+                    Icons.play_arrow,
+                    size: 40,
                   ),
+                ],
+              ),
+            ),
+          ),
+          // Row(
+          //   children: [
+          //     Icon(
+          //       Icons.arrow_forward_outlined,
+          //       color: Colors.black,
+          //     ),
+          //     Column(
+          //       children: [
+          //         GestureDetector(
+          //           onTap: () {
+          //             setState(() {
+          //               selected_tone = 0;
+          //               c = a;
+          //               d = b;
+          //               e = Colors.black;
+          //               f = Colors.black;
+          //             });
+          //           },
+          //           child: Container(
+          //               width: 100,
+          //               height: 100,
+          //               alignment: Alignment.center,
+          //               child: Container(
+          //                 alignment: Alignment.center,
+          //                 child: Text(
+          //                   "A",
+          //                   style: TextStyle(
+          //                       fontSize: 30, fontWeight: FontWeight.bold),
+          //                 ),
+          //                 height: 90,
+          //                 width: 90,
+          //                 decoration: BoxDecoration(
+          //                     shape: BoxShape.circle, color: Colors.white),
+          //               ),
+          //               decoration: BoxDecoration(
+          //                 shape: BoxShape.circle,
+          //                 gradient: LinearGradient(
+          //                     begin: Alignment.topLeft,
+          //                     end: Alignment(0.8,
+          //                         0.0), // 10% of the width, so there are ten blinds.
+          //                     colors: <Color>[c, d]),
+          //               )),
+          //         ),
+          //       ],
+          //     ),
+          //     SizedBox(
+          //       width: 10,
+          //     ),
+          //     Column(
+          //       children: [
+          //         GestureDetector(
+          //           onTap: () {
+          //             setState(() {
+          //               selected_tone = 1;
+          //               e = a;
+          //               f = b;
+          //               c = Colors.black;
+          //               d = Colors.black;
+          //             });
+          //           },
+          //           child: Container(
+          //               width: 100,
+          //               height: 100,
+          //               alignment: Alignment.center,
+          //               child: Container(
+          //                 alignment: Alignment.center,
+          //                 child: Text(
+          //                   "B",
+          //                   style: TextStyle(
+          //                       fontSize: 30, fontWeight: FontWeight.bold),
+          //                 ),
+          //                 height: 90,
+          //                 width: 90,
+          //                 decoration: BoxDecoration(
+          //                     shape: BoxShape.circle, color: Colors.white),
+          //               ),
+          //               decoration: BoxDecoration(
+          //                 shape: BoxShape.circle,
+          //                 gradient: LinearGradient(
+          //                     begin: Alignment.topLeft,
+          //                     end: Alignment(0.8,
+          //                         0.0), // 10% of the width, so there are ten blinds.
+          //                     colors: <Color>[e, f]),
+          //               )),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Speed",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: "poppins",
+                      ),
+                    ),
+                    GestureDetector(
+                      child: Icon(Icons.replay),
+                      onTap: () {
+                        setState(() {
+                          currval = 1;
+                        });
+                      },
+                    )
+                  ],
                 ),
-              )
+              ),
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  activeTrackColor: Colors.black,
+                  inactiveTrackColor: Colors.black,
+                  trackShape: RectangularSliderTrackShape(),
+                  trackHeight: 4.0,
+                  thumbColor: Colors.white,
+                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                ),
+                child: Container(
+                  child: Slider(
+                      value: currval.toDouble(),
+                      min: 0.0,
+                      max: 3.0,
+                      divisions: 10,
+                      label: 'Set speed',
+                      onChanged: (double newValue) {
+                        setState(() {
+                          currval = newValue;
+                        });
+                      },
+                      semanticFormatterCallback: (double newValue) {
+                        return '${newValue.round()} dollars';
+                      }),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Pitch",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: "poppins",
+                      ),
+                    ),
+                    GestureDetector(
+                      child: Icon(Icons.replay),
+                      onTap: () {
+                        setState(() {
+                          currval2 = 1;
+                          print(currval);
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  activeTrackColor: Colors.black,
+                  inactiveTrackColor: Colors.black,
+                  trackShape: RectangularSliderTrackShape(),
+                  trackHeight: 4.0,
+                  thumbColor: Colors.white,
+                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                ),
+                child: Container(
+                  child: Slider(
+                      value: currval2.toDouble(),
+                      min: 0.5,
+                      max: 2.0,
+                      divisions: 15,
+                      label: 'Set pitch',
+                      onChanged: (double newValue) {
+                        setState(() {
+                          currval2 = newValue;
+                        });
+                      },
+                      semanticFormatterCallback: (double newValue) {
+                        return '${newValue.round()} dollars';
+                      }),
+                ),
+              ),
             ],
           ),
-        )
-      ]),
-      // This trailing comma makes auto-formatting nicer for build methods.
-    ));
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(60, 30, 60, 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      child: Icon(
+                        Icons.volume_up,
+                        size: 40,
+                      ),
+                      onTap: () {
+                        speak(
+                            'OnlySpeech Text To Speech is a mobile app that allows people with ADHD, dyslexia, vision problems, concussions, and other reading difficulties to have any text read out to them using a computer generated text to speech voice.');
+                      },
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _val = currval;
+                          _pitch = currval2;
+                          print(_pitch);
+                          print(_val);
+                          saveval();
+                        });
+                      },
+                      child: Text(
+                        "Set",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: "racing",
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 100,
+              ),
+            ],
+          )
+        ])));
   }
 }
