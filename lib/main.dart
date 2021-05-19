@@ -43,7 +43,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   _launchEmail() async {
     launch(
-        "mailto:rakhi@aeologic.com?subject=TestEmail&body=How are you%20plugin");
+        "mailto:onlyspeechapp@gmail.com?subject=Report for problem&body=How are you%20plugin");
   }
 
   _launchURL() async {
@@ -179,6 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         color: Colors.white,
                                         fontSize: 20,
                                       )),
+
                                 ],
                               ),
                             ),
@@ -205,22 +206,29 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.info,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text("About",
-                                    style: TextStyle(
-                                      fontFamily: "poppins",
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    )),
-                              ],
+                            child: GestureDetector(
+
+                              onTap:() {
+                                launch(
+                                    "https://www.driffnotes.com/onlyspeech-about/");
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.info,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text("About",
+                                      style: TextStyle(
+                                        fontFamily: "poppins",
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                      )),
+                                ],
+                              ),
                             ),
                           )
                         ],
