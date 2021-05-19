@@ -64,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
   double _val = 1;
   double _pitch = 1;
 
-
   Future speak(String s) async {
     FlutterTts flutterTts = FlutterTts();
     await flutterTts.setLanguage("en-IN");
@@ -72,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
     await flutterTts.setSpeechRate(_val);
     await flutterTts.speak(s);
   }
-
 
   showOverlay(BuildContext context) async {
     OverlayState? overlayState = Overlay.of(context);
@@ -110,7 +108,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     fontSize: 45,
                                   ),
                                 ),
-
                                 GestureDetector(
                                   onTap: () {
                                     overlayEntry?.remove();
@@ -127,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 _launchURL();
                               },
                               child: Row(
@@ -190,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20,20,20,40),
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
                             child: Row(
                               children: [
                                 Icon(
@@ -206,7 +203,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: Colors.white,
                                       fontSize: 20,
                                     )),
-
                               ],
                             ),
                           )
@@ -389,8 +385,10 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Text(
                 "Speed",
-                style: TextStyle(fontSize: 25,
-                  fontFamily: "poppins",),
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: "poppins",
+                ),
               ),
               Icon(Icons.refresh)
             ],
@@ -404,16 +402,13 @@ class _MyHomePageState extends State<MyHomePage> {
             trackHeight: 4.0,
             thumbColor: Colors.white,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-
           ),
-
           child: Container(
             child: Slider(
                 value: _val,
                 min: 0.0,
                 max: 1.0,
                 divisions: 10,
-
                 label: 'Set speed',
                 onChanged: (double newValue) {
                   setState(() {
@@ -432,7 +427,10 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Text(
                 "Pitch",
-                style: TextStyle(fontSize: 25,fontFamily: "poppins",),
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: "poppins",
+                ),
               ),
               Icon(Icons.refresh)
             ],
@@ -446,7 +444,6 @@ class _MyHomePageState extends State<MyHomePage> {
             trackHeight: 4.0,
             thumbColor: Colors.white,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-
           ),
           child: Container(
             child: Slider(
@@ -454,7 +451,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 min: 0.5,
                 max: 2.0,
                 divisions: 15,
-
                 label: 'Set pitch',
                 onChanged: (double newValue) {
                   setState(() {
@@ -477,8 +473,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Text(
                 "Set",
-                style: TextStyle(fontSize: 25,
-                  fontFamily: "racing",),
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: "racing",
+                ),
               )
             ],
           ),
