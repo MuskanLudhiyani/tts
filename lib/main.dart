@@ -418,7 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Slider(
                 value: _val,
                 min: 0.0,
-                max: 1.0,
+                max: 3.0,
                 divisions: 10,
 
                 label: 'Set speed',
