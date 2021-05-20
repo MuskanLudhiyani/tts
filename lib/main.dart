@@ -1,90 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:workmanager/workmanager.dart';
 import 'shareservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-int selected_tone = 0;
-Color a = Colors.purple;
-Color b = Colors.blue;
-Color c = Colors.purple;
-Color d = Colors.blue;
-Color e = Colors.black;
-Color f = Colors.black;
-double _val = 1;
-double currval = 1;
-double currval2 = 1;
-double _pitch = 1;
-
-Future getval() async {
-  final prefs = await SharedPreferences.getInstance();
-  setState(() {
-    _val = prefs.getDouble('_val') ?? 1;
-    _pitch = prefs.getDouble('_pitch') ?? 1;
-  });
-}
-
-Future saveval() async {
-  final prefs = await SharedPreferences.getInstance();
-  setState(() {
-
-    prefs.setDouble('_val', _val);
-    prefs.setDouble('_pitch', _pitch);
-  });
-}
-Future speak(String s) async {
-  FlutterTts flutterTts = FlutterTts();
-  await flutterTts.setLanguage("en-IN");
-  await flutterTts.setPitch(_pitch);
-  await flutterTts.setSpeechRate(_val);
-  await flutterTts.speak(s);
-}
-
-const myTask = "syncWithTheBackEnd";
-String _sharedText = sharedData;
-
-void callbackDispatcher() {
-// this method will be called every hour
-  Workmanager.executeTask((task, inputdata) async {
-    switch (task) {
-      case myTask:
-        _sharedText = sharedData;
-        speak(_sharedText);
-        _sharedText = "";
-        break;
-
-      case Workmanager.iOSBackgroundTask:
-        print("iOS background fetch delegate ran");
-        break;
-    }
-
-    //Return true when the task executed successfully or not
-    return Future.value(true);
-  });
-}
-
 void main() {
-  // needs to be initialized before using workmanager package
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // initialize Workmanager with the function which you want to invoke after any periodic time
-  Workmanager.initialize(callbackDispatcher);
-
-  // Periodic task registration
-  Workmanager.registerOneOffTask(
-    "2",
-    // use the same task name used in callbackDispatcher function for identifying the task
-    // Each task must have a unique name if you want to add multiple tasks;
-    myTask,
-    // When no frequency is provided the default 15 minutes is set.
-    // Minimum frequency is 15 min.
-    // Android will automatically change your frequency to 15 min if you have configured a lower frequency than 15 minutes.
-    // change duration according to your needs
-  );
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -121,7 +43,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   _launchEmail() async {
     launch(
-        "mailto:onlyspeechapp@gmail.com?subject=Report for problem&body=How are you%20plugin");
+        "mailto:onlyspeechapp@gmail.com?subject=Issue regarding OnlySpeech&body=I have been facing an issue.");
   }
 
   _launchURL() async {
@@ -133,8 +55,43 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  int selected_tone = 0;
+  Color a = Colors.purple;
+  Color b = Colors.blue;
+  Color c = Colors.purple;
+  Color d = Colors.blue;
+  Color e = Colors.black;
+  Color f = Colors.black;
+  double _val = 1;
+  double currval = 1;
+  double currval2 = 1;
+  double _pitch = 1;
 
+  Future getval() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _val = prefs.getDouble('_val') ?? 1;
+      _pitch = prefs.getDouble('_pitch') ?? 1;
+      currval = _val;
+      currval2 = _pitch;
+    });
+  }
 
+  Future saveval() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setDouble('_val', _val);
+      prefs.setDouble('_pitch', _pitch);
+    });
+  }
+
+  Future speak(String s) async {
+    FlutterTts flutterTts = FlutterTts();
+    await flutterTts.setLanguage("en-IN");
+    await flutterTts.setPitch(_pitch);
+    await flutterTts.setSpeechRate(_val);
+    await flutterTts.speak(s);
+  }
 
   showOverlay(BuildContext context) async {
     OverlayState? overlayState = Overlay.of(context);
@@ -148,10 +105,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 type: MaterialType.transparency,
                 child: Container(
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/back.jpeg"),
-                          fit: BoxFit.cover)
-                    ),
+                        image: DecorationImage(
+                            image: AssetImage("assets/images/back.jpeg"),
+                            fit: BoxFit.cover)),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
@@ -186,28 +142,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: GestureDetector(
-                              onTap: () {
-                                _launchURL();
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.play_arrow, color: Colors.white),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text("Watch a Tutorial",
-                                      style: TextStyle(
-                                        fontFamily: "poppins",
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: GestureDetector(
                               onTap: _launchEmail,
                               child: Row(
                                 children: [
@@ -218,13 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   SizedBox(
                                     width: 20,
                                   ),
-                                  Text("Report an Abuse",
+                                  Text("Report an Issue",
                                       style: TextStyle(
                                         fontFamily: "poppins",
                                         color: Colors.white,
                                         fontSize: 20,
                                       )),
-
                                 ],
                               ),
                             ),
@@ -252,8 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
                             child: GestureDetector(
-
-                              onTap:() {
+                              onTap: () {
                                 launch(
                                     "https://www.driffnotes.com/onlyspeech-about/");
                               },
@@ -292,12 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     getval();
     ShareService()
-      // Register a callback so that we handle shared data if it arrives while the
-      // app is running
       ..onDataReceived = _handleSharedData
-
-      // Check to see if there is any shared data already, meaning that the app
-      // was launched via sharing.
       ..getSharedData().then(_handleSharedData);
   }
 
@@ -311,12 +238,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
         body: Center(
             child: Column(
@@ -357,35 +278,41 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Container(
-              height: 80,
-              decoration: BoxDecoration(
-
-              image: DecorationImage(
-              image: AssetImage("assets/images/back.jpeg"),
-                fit: BoxFit.cover),
-
-                border: Border.all(
-                  color: Colors.black,
-                  width: 2,
+            child: GestureDetector(
+              onTap: () {
+                launch('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+              },
+              child: Container(
+                height: 80,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/back.jpeg"),
+                      fit: BoxFit.cover),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Watch a Tutorial',
-                    style: TextStyle(
-                        fontSize: 30,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'Watch a Tutorial',
+                      style: TextStyle(
+                        fontSize: 25,
                         fontFamily: "poppins",
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Icon(
-                    Icons.play_arrow,
-                    size: 40,
-                  ),
-                ],
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Icon(
+                      Icons.play_arrow,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -517,8 +444,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       value: currval.toDouble(),
                       min: 0.0,
                       max: 3.0,
-                      divisions: 10,
-                      label: 'Set speed',
+                      divisions: 30,
+                      label:
+                          double.parse((currval).toStringAsFixed(2)).toString(),
                       onChanged: (double newValue) {
                         setState(() {
                           currval = newValue;
@@ -568,7 +496,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       min: 0.5,
                       max: 2.0,
                       divisions: 15,
-                      label: 'Set pitch',
+                      label: double.parse((currval2).toStringAsFixed(2))
+                          .toString(),
                       onChanged: (double newValue) {
                         setState(() {
                           currval2 = newValue;
