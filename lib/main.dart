@@ -1,12 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:workmanager/workmanager.dart';
 import 'shareservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+int selected_tone = 0;
+Color a = Colors.purple;
+Color b = Colors.blue;
+Color c = Colors.purple;
+Color d = Colors.blue;
+Color e = Colors.black;
+Color f = Colors.black;
+double _val = 1;
+double currval = 1;
+double currval2 = 1;
+double _pitch = 1;
+
+Future getval() async {
+  final prefs = await SharedPreferences.getInstance();
+  setState(() {
+    _val = prefs.getDouble('_val') ?? 1;
+    _pitch = prefs.getDouble('_pitch') ?? 1;
+  });
+}
+
+Future saveval() async {
+  final prefs = await SharedPreferences.getInstance();
+  setState(() {
+
+    prefs.setDouble('_val', _val);
+    prefs.setDouble('_pitch', _pitch);
+  });
+}
+Future speak(String s) async {
+  FlutterTts flutterTts = FlutterTts();
+  await flutterTts.setLanguage("en-IN");
+  await flutterTts.setPitch(_pitch);
+  await flutterTts.setSpeechRate(_val);
+  await flutterTts.speak(s);
+}
+
+const myTask = "syncWithTheBackEnd";
+String _sharedText = sharedData;
+
+void callbackDispatcher() {
+// this method will be called every hour
+  Workmanager.executeTask((task, inputdata) async {
+    switch (task) {
+      case myTask:
+        _sharedText = sharedData;
+        speak(_sharedText);
+        _sharedText = "";
+        break;
+
+      case Workmanager.iOSBackgroundTask:
+        print("iOS background fetch delegate ran");
+        break;
+    }
+
+    //Return true when the task executed successfully or not
+    return Future.value(true);
+  });
+}
+
 void main() {
+  // needs to be initialized before using workmanager package
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // initialize Workmanager with the function which you want to invoke after any periodic time
+  Workmanager.initialize(callbackDispatcher);
+
+  // Periodic task registration
+  Workmanager.registerOneOffTask(
+    "2",
+    // use the same task name used in callbackDispatcher function for identifying the task
+    // Each task must have a unique name if you want to add multiple tasks;
+    myTask,
+    // When no frequency is provided the default 15 minutes is set.
+    // Minimum frequency is 15 min.
+    // Android will automatically change your frequency to 15 min if you have configured a lower frequency than 15 minutes.
+    // change duration according to your needs
+  );
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -55,41 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  int selected_tone = 0;
-  Color a = Colors.purple;
-  Color b = Colors.blue;
-  Color c = Colors.purple;
-  Color d = Colors.blue;
-  Color e = Colors.black;
-  Color f = Colors.black;
-  double _val = 1;
-  double currval = 1;
-  double currval2 = 1;
-  double _pitch = 1;
 
-  Future getval() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _val = prefs.getDouble('_val') ?? 1;
-      _pitch = prefs.getDouble('_pitch') ?? 1;
-    });
-  }
 
-  Future saveval() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      prefs.setDouble('_val', _val);
-      prefs.setDouble('_pitch', _pitch);
-    });
-  }
-
-  Future speak(String s) async {
-    FlutterTts flutterTts = FlutterTts();
-    await flutterTts.setLanguage("en-IN");
-    await flutterTts.setPitch(_pitch);
-    await flutterTts.setSpeechRate(_val);
-    await flutterTts.speak(s);
-  }
 
   showOverlay(BuildContext context) async {
     OverlayState? overlayState = Overlay.of(context);
