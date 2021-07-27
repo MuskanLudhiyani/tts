@@ -4,6 +4,7 @@ import 'shareservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'saved.dart';
 import 'recognise.dart';
 void main() {
   runApp(MyApp());
@@ -279,239 +280,137 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
+
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: GestureDetector(
-              onTap: () {
-                launch('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-              },
-              child: Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/back.jpeg"),
-                      fit: BoxFit.cover),
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Watch a Tutorial',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontFamily: "poppins",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.play_arrow,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
+            child:                   SingleChildScrollView(
+              child: Text(
+                'OnlySpeak Text To Speech is a mobile app that allows people with ADHD, dyslexia, vision problems, concussions, and other reading difficulties to have any text read out to them using a computer generated text to speech voice.'
+                ,style: TextStyle(
+                fontSize: 15,
+                fontFamily: "poppins",
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
               ),
             ),
+
           ),
-          // Row(
-          //   children: [
-          //     Icon(
-          //       Icons.arrow_forward_outlined,
-          //       color: Colors.black,
-          //     ),
-          //     Column(
-          //       children: [
-          //         GestureDetector(
-          //           onTap: () {
-          //             setState(() {
-          //               selected_tone = 0;
-          //               c = a;
-          //               d = b;
-          //               e = Colors.black;
-          //               f = Colors.black;
-          //             });
-          //           },
-          //           child: Container(
-          //               width: 100,
-          //               height: 100,
-          //               alignment: Alignment.center,
-          //               child: Container(
-          //                 alignment: Alignment.center,
-          //                 child: Text(
-          //                   "A",
-          //                   style: TextStyle(
-          //                       fontSize: 30, fontWeight: FontWeight.bold),
-          //                 ),
-          //                 height: 90,
-          //                 width: 90,
-          //                 decoration: BoxDecoration(
-          //                     shape: BoxShape.circle, color: Colors.white),
-          //               ),
-          //               decoration: BoxDecoration(
-          //                 shape: BoxShape.circle,
-          //                 gradient: LinearGradient(
-          //                     begin: Alignment.topLeft,
-          //                     end: Alignment(0.8,
-          //                         0.0), // 10% of the width, so there are ten blinds.
-          //                     colors: <Color>[c, d]),
-          //               )),
-          //         ),
-          //       ],
-          //     ),
-          //     SizedBox(
-          //       width: 10,
-          //     ),
-          //     Column(
-          //       children: [
-          //         GestureDetector(
-          //           onTap: () {
-          //             setState(() {
-          //               selected_tone = 1;
-          //               e = a;
-          //               f = b;
-          //               c = Colors.black;
-          //               d = Colors.black;
-          //             });
-          //           },
-          //           child: Container(
-          //               width: 100,
-          //               height: 100,
-          //               alignment: Alignment.center,
-          //               child: Container(
-          //                 alignment: Alignment.center,
-          //                 child: Text(
-          //                   "B",
-          //                   style: TextStyle(
-          //                       fontSize: 30, fontWeight: FontWeight.bold),
-          //                 ),
-          //                 height: 90,
-          //                 width: 90,
-          //                 decoration: BoxDecoration(
-          //                     shape: BoxShape.circle, color: Colors.white),
-          //               ),
-          //               decoration: BoxDecoration(
-          //                 shape: BoxShape.circle,
-          //                 gradient: LinearGradient(
-          //                     begin: Alignment.topLeft,
-          //                     end: Alignment(0.8,
-          //                         0.0), // 10% of the width, so there are ten blinds.
-          //                     colors: <Color>[e, f]),
-          //               )),
-          //         ),
-          //       ],
-          //     ),
-          //   ],
-          // ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Speed",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontFamily: "poppins",
+
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => saved()));
+                  },
+                  child: Icon(
+                      Icons.save_alt
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Speed",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: "poppins",
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      child: Icon(Icons.replay),
-                      onTap: () {
-                        setState(() {
-                          currval = 1;
-                        });
-                      },
-                    )
-                  ],
+                      GestureDetector(
+                        child: Icon(Icons.replay),
+                        onTap: () {
+                          setState(() {
+                            currval = 1;
+                          });
+                        },
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: Colors.black,
-                  inactiveTrackColor: Colors.black,
-                  trackShape: RectangularSliderTrackShape(),
-                  trackHeight: 4.0,
-                  thumbColor: Colors.white,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: Colors.black,
+                    inactiveTrackColor: Colors.black,
+                    trackShape: RectangularSliderTrackShape(),
+                    trackHeight: 4.0,
+                    thumbColor: Colors.white,
+                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                  ),
+                  child: Container(
+                    child: Slider(
+                        value: currval.toDouble(),
+                        min: 0.0,
+                        max: 3.0,
+                        divisions: 30,
+                        label:
+                            double.parse((currval).toStringAsFixed(2)).toString(),
+                        onChanged: (double newValue) {
+                          setState(() {
+                            currval = newValue;
+                          });
+                        },
+                        semanticFormatterCallback: (double newValue) {
+                          return '${newValue.round()} dollars';
+                        }),
+                  ),
                 ),
-                child: Container(
-                  child: Slider(
-                      value: currval.toDouble(),
-                      min: 0.0,
-                      max: 3.0,
-                      divisions: 30,
-                      label:
-                          double.parse((currval).toStringAsFixed(2)).toString(),
-                      onChanged: (double newValue) {
-                        setState(() {
-                          currval = newValue;
-                        });
-                      },
-                      semanticFormatterCallback: (double newValue) {
-                        return '${newValue.round()} dollars';
-                      }),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Pitch",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontFamily: "poppins",
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Pitch",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: "poppins",
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      child: Icon(Icons.replay),
-                      onTap: () {
-                        setState(() {
-                          currval2 = 1;
-                          print(currval);
-                        });
-                      },
-                    )
-                  ],
+                      GestureDetector(
+                        child: Icon(Icons.replay),
+                        onTap: () {
+                          setState(() {
+                            currval2 = 1;
+                            print(currval);
+                          });
+                        },
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: Colors.black,
-                  inactiveTrackColor: Colors.black,
-                  trackShape: RectangularSliderTrackShape(),
-                  trackHeight: 4.0,
-                  thumbColor: Colors.white,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: Colors.black,
+                    inactiveTrackColor: Colors.black,
+                    trackShape: RectangularSliderTrackShape(),
+                    trackHeight: 4.0,
+                    thumbColor: Colors.white,
+                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                  ),
+                  child: Container(
+                    child: Slider(
+                        value: currval2.toDouble(),
+                        min: 0.5,
+                        max: 2.0,
+                        divisions: 15,
+                        label: double.parse((currval2).toStringAsFixed(2))
+                            .toString(),
+                        onChanged: (double newValue) {
+                          setState(() {
+                            currval2 = newValue;
+                          });
+                        },
+                        semanticFormatterCallback: (double newValue) {
+                          return '${newValue.round()} dollars';
+                        }),
+                  ),
                 ),
-                child: Container(
-                  child: Slider(
-                      value: currval2.toDouble(),
-                      min: 0.5,
-                      max: 2.0,
-                      divisions: 15,
-                      label: double.parse((currval2).toStringAsFixed(2))
-                          .toString(),
-                      onChanged: (double newValue) {
-                        setState(() {
-                          currval2 = newValue;
-                        });
-                      },
-                      semanticFormatterCallback: (double newValue) {
-                        return '${newValue.round()} dollars';
-                      }),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           Column(
             children: [
