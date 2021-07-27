@@ -3,7 +3,8 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'shareservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter/services.dart';
+import 'recognise.dart';
 void main() {
   runApp(MyApp());
 }
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'only speech',
+      title: 'only speak',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -43,7 +44,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   _launchEmail() async {
     launch(
-        "mailto:onlyspeechapp@gmail.com?subject=Issue regarding OnlySpeech&body=I have been facing an issue.");
+        "mailto:onlyspeakapp@gmail.com?subject=Issue regarding OnlySpeak&body=I have been facing an issue.");
   }
 
   _launchURL() async {
@@ -118,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "OnlySpeech",
+                                  "OnlySpeak",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'racing',
@@ -187,7 +188,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: GestureDetector(
                               onTap: () {
                                 launch(
-                                    "https://www.driffnotes.com/onlyspeech-about/");
+                                    "https://www.driffnotes.com/onlyspeak"
+                                        "-about/");
                               },
                               child: Row(
                                 children: [
@@ -226,6 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ShareService()
       ..onDataReceived = _handleSharedData
       ..getSharedData().then(_handleSharedData);
+
   }
 
   void _handleSharedData(String sharedData) {
@@ -254,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "OnlySpeech",
+                      "OnlySpeak",
                       style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'racing',
@@ -518,13 +521,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
+
+                      child: Icon(
+                        Icons.image,
+                      ),
+                      onTap: (){
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => TextRecognitionWidget()));
+                      },
+                    ),
+                    GestureDetector(
                       child: Icon(
                         Icons.volume_up,
                         size: 40,
                       ),
                       onTap: () {
                         speak(
-                            'OnlySpeech Text To Speech is a mobile app that allows people with ADHD, dyslexia, vision problems, concussions, and other reading difficulties to have any text read out to them using a computer generated text to speech voice.');
+                            'OnlySpeak Text To Speech is a mobile app that allows people with ADHD, dyslexia, vision problems, concussions, and other reading difficulties to have any text read out to them using a computer generated text to speech voice.');
                       },
                     ),
                     GestureDetector(
