@@ -46,15 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
         "mailto:onlyspeechapp@gmail.com?subject=Issue regarding OnlySpeech&body=I have been facing an issue.");
   }
 
-  _launchURL() async {
-    const url = 'https://flutterdevs.com/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   int selected_tone = 0;
   Color a = Colors.purple;
   Color b = Colors.blue;

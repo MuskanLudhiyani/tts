@@ -30,8 +30,6 @@ class MainActivity : FlutterActivity() {
 
 
   private fun handleIntent() {
-    // intent is a property of this activity
-    // Only process the intent if it's a send intent and it's of type 'text'
     if (intent?.action == Intent.ACTION_SEND) {
       if (intent.type == "text/plain") {
         intent.getStringExtra(Intent.EXTRA_TEXT)?.let { intentData ->
