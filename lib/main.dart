@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'saved.dart';
 import 'recognise.dart';
+import 'db.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -179,9 +181,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
                             child: GestureDetector(
                               onTap: () {
-                                launch(
-                                    "https://www.driffnotes.com/onlyspeak"
-                                        "-about/");
+                                launch("https://www.driffnotes.com/onlyspeak"
+                                    "-about/");
                               },
                               child: Row(
                                 children: [
@@ -220,7 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
     ShareService()
       ..onDataReceived = _handleSharedData
       ..getSharedData().then(_handleSharedData);
-
   }
 
   void _handleSharedData(String sharedData) {
@@ -271,33 +271,30 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child:                   SingleChildScrollView(
+            child: SingleChildScrollView(
               child: Text(
-                'OnlySpeak Text To Speech is a mobile app that allows people with ADHD, dyslexia, vision problems, concussions, and other reading difficulties to have any text read out to them using a computer generated text to speech voice.'
-                ,style: TextStyle(
-                fontSize: 15,
-                fontFamily: "poppins",
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+                'OnlySpeak Text To Speech is a mobile app that allows people with ADHD, dyslexia, vision problems, concussions, and other reading difficulties to have any text read out to them using a computer generated text to speech voice.',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "poppins",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
-
           ),
-
           SingleChildScrollView(
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => saved()));
+                  onTap: () {
+                    addnote(_sharedText);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => saved()));
                   },
-                  child: Icon(
-                      Icons.save_alt
-                  ),
+                  child: Icon(Icons.save_alt),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -337,8 +334,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         min: 0.0,
                         max: 3.0,
                         divisions: 30,
-                        label:
-                            double.parse((currval).toStringAsFixed(2)).toString(),
+                        label: double.parse((currval).toStringAsFixed(2))
+                            .toString(),
                         onChanged: (double newValue) {
                           setState(() {
                             currval = newValue;
@@ -411,13 +408,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-
                       child: Icon(
                         Icons.image,
                       ),
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => TextRecognitionWidget()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TextRecognitionWidget()));
                       },
                     ),
                     GestureDetector(
